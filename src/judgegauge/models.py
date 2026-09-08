@@ -12,6 +12,9 @@ class Verdict(str, Enum):
     FAIL = "fail"
 
 
+JSON_SCHEMA_VERSION = 1
+
+
 @dataclass(frozen=True)
 class Candidate:
     id: str
@@ -76,4 +79,5 @@ class CalibrationResult:
     def to_dict(self) -> dict[str, Any]:
         value = asdict(self)
         value["verdict"] = self.verdict.value
+        value["schema_version"] = JSON_SCHEMA_VERSION
         return value
