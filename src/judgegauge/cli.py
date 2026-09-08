@@ -7,13 +7,20 @@ from pathlib import Path
 from .calibration import calibrate
 from .errors import JudgeGaugeError
 from .providers import DEFAULT_MODEL
-from .reporting import render_html, render_json, render_sarif, render_text
+from .reporting import (
+    render_html,
+    render_json,
+    render_markdown,
+    render_sarif,
+    render_text,
+)
 
 RENDERERS = {
     "text": render_text,
     "json": render_json,
     "sarif": render_sarif,
     "html": render_html,
+    "markdown": render_markdown,
 }
 
 
