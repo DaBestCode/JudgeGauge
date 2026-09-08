@@ -11,9 +11,12 @@ def _escape_md(text: str) -> str:
 
     Table delimiters (``|``) and inline HTML supplied through model
     identifiers or metric details must not break the table layout.
+    Embedded newlines in single-line fields are collapsed so a model
+    identifier cannot inject a false heading, table row, or verdict.
     """
     text = html.escape(text)
-    return text.replace("|", "\\|")
+    text = text.replace("|", "\\|")
+    return text.replace("\r", " ").replace("\n", " ")
 
 
 def render_text(result: CalibrationResult) -> str:
