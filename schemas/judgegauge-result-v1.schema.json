@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/DaBestCode/JudgeGauge/blob/main/schemas/judgegauge-result-v1.schema.json",
+  "title": "JudgeGauge Calibration Result v1",
+  "description": "Stable serialized JSON contract for JudgeGauge calibration reports.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "verdict",
+    "metrics",
+    "request_count",
+    "valid_readouts",
+    "invalid_readouts",
+    "requested_model",
+    "response_models",
+    "snapshot_level",
+    "suite",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "verdict": { "enum": ["pass", "fail"] },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "threshold", "comparator", "passed", "detail"],
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "number" },
+          "threshold": { "type": "number" },
+          "comparator": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "detail": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "request_count": { "type": "integer", "minimum": 0 },
+    "valid_readouts": { "type": "integer", "minimum": 0 },
+    "invalid_readouts": { "type": "integer", "minimum": 0 },
+    "requested_model": { "type": "string" },
+    "response_models": { "type": "array", "items": { "type": "string" } },
+    "snapshot_level": { "type": "string" },
+    "suite": { "type": "string" },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
