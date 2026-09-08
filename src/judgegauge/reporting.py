@@ -75,3 +75,39 @@ def render_html(result: CalibrationResult) -> str:
 <p>Suite: {html.escape(result.suite)} · Model: {html.escape(result.requested_model)} · Requests: {result.request_count}</p>
 <table><thead><tr><th>Metric</th><th>Value</th><th>Gate</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table>
 <h2>Scope limitations</h2><ul>{limitations}</ul></body></html>"""
+
+
+def _md_escape(text: str) -> str:
+    return html.escape(str(text)).replace("|", "&#124;")
+
+
+def render_markdown(result: CalibrationResult) -> str:
+    lines = [
+        "# JudgeGauge calibration report",
+        "",
+        f"**VERDICT:** {result.verdict.value.upper()}",
+        "",
+        f"- **Suite:** {_md_escape(result.suite)}",
+        f"- **Model:** {_md_escape(result.requested_model)}",
+        f"- **Requests:** {result.request_count}",
+        f"- **Snapshot identity:** {_md_escape(result.snapshot_level)}",
+        "",
+        "## Metrics",
+        "",
+        "| Metric | Value | Gate | Status |",
+        "|---|---|---|---|",
+    ]
+    for metric in result.metrics:
+        status = "✅ PASS" if metric.passed else "❌ FAIL"
+        gate = f"{_md_escape(metric.comparator)} {metric.threshold:.3f}"
+        lines.append(f"| {_md_escape(metric.name)} | {metric.value:.3f} | {gate} | {status} |")
+
+    lines.extend([
+        "",
+        "## Scope limitations",
+        ""
+    ])
+    for item in result.limitations:
+        lines.append(f"- {_md_escape(item)}")
+    
+    return "\n".join(lines)

@@ -3,7 +3,7 @@ import unittest
 
 import judgegauge
 from judgegauge.models import JudgeResponse
-from judgegauge.reporting import render_html, render_json, render_sarif, render_text
+from judgegauge.reporting import render_html, render_json, render_sarif, render_text, render_markdown
 
 
 class StableJudge:
@@ -25,6 +25,7 @@ class ReportingTests(unittest.TestCase):
         self.assertEqual(json.loads(render_json(result))["verdict"], "pass")
         self.assertEqual(json.loads(render_sarif(result))["version"], "2.1.0")
         self.assertIn("<title>JudgeGauge report</title>", render_html(result))
+        self.assertIn("**VERDICT:** PASS", render_markdown(result))
 
 
 if __name__ == "__main__":
