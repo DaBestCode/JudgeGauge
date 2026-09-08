@@ -25,7 +25,7 @@ Homepage = "https://github.com/DaBestCode/JudgeGauge"
 Issues = "https://github.com/DaBestCode/JudgeGauge/issues"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.9"]
+dev = ["ruff>=0.9", "jsonschema>=4.23"]
 
 [project.scripts]
 judgegauge = "judgegauge.cli:main"
