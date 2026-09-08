@@ -6,6 +6,16 @@ import json
 from .models import CalibrationResult
 
 
+def _escape_md(text: str) -> str:
+    """Escape characters that carry meaning in Markdown.
+
+    Table delimiters (``|``) and inline HTML supplied through model
+    identifiers or metric details must not break the table layout.
+    """
+    text = html.escape(text)
+    return text.replace("|", "\\|")
+
+
 def render_text(result: CalibrationResult) -> str:
     rows = [
         "JudgeGauge 0.1.0",
@@ -75,3 +85,49 @@ def render_html(result: CalibrationResult) -> str:
 <p>Suite: {html.escape(result.suite)} · Model: {html.escape(result.requested_model)} · Requests: {result.request_count}</p>
 <table><thead><tr><th>Metric</th><th>Value</th><th>Gate</th><th>Status</th></tr></thead><tbody>{rows}</tbody></table>
 <h2>Scope limitations</h2><ul>{limitations}</ul></body></html>"""
+
+
+def render_markdown(result: CalibrationResult) -> str:
+    """Render a Markdown summary suitable for pull-request summaries or issue comments.
+
+    Passed and failed metrics are visually distinct (``PASS`` / ``FAIL`` plus a
+    bold/italic marker) without relying only on color. The report is
+    deterministic for the same ``CalibrationResult`` and makes no cross-day or
+    validity claim.
+    """
+    header = _escape_md(result.requested_model)
+    suite = _escape_md(result.suite)
+    lines = [
+        f"## JudgeGauge calibration — {header}",
+        "",
+        f"- **Suite:** {suite}",
+        f"- **Requests:** {result.request_count}",
+        f"- **Snapshot identity:** {result.snapshot_level}",
+        f"- **Valid readouts:** {result.valid_readouts}/{result.request_count}",
+        "",
+        "### Metrics",
+        "",
+        "| Metric | Value | Gate | Status |",
+        "| --- | ---: | --- | ---: |",
+    ]
+    for metric in result.metrics:
+        name = _escape_md(metric.name)
+        comparator = _escape_md(metric.comparator)
+        status = "**PASS** ✓" if metric.passed else "**FAIL** ✗"
+        lines.append(
+            f"| {name} | {metric.value:.3f} | {comparator} {metric.threshold:.3f} | {status} |"
+        )
+    verdict_text = "PASS" if result.passed else "FAIL"
+    lines.extend(
+        [
+            "",
+            f"**Verdict: {verdict_text}**",
+            "",
+            "### Scope limitations",
+            "",
+        ]
+    )
+    for item in result.limitations:
+        lines.append(f"- {_escape_md(item)}")
+    lines.append("")
+    return "\n".join(lines)
