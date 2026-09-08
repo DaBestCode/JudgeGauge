@@ -3,7 +3,13 @@ import unittest
 
 import judgegauge
 from judgegauge.models import JudgeResponse
-from judgegauge.reporting import render_html, render_json, render_sarif, render_text, render_markdown
+from judgegauge.reporting import (
+    render_html,
+    render_json,
+    render_sarif,
+    render_text,
+    render_markdown,
+)
 
 
 class StableJudge:

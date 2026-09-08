@@ -102,12 +102,8 @@ def render_markdown(result: CalibrationResult) -> str:
         gate = f"{_md_escape(metric.comparator)} {metric.threshold:.3f}"
         lines.append(f"| {_md_escape(metric.name)} | {metric.value:.3f} | {gate} | {status} |")
 
-    lines.extend([
-        "",
-        "## Scope limitations",
-        ""
-    ])
+    lines.extend(["", "## Scope limitations", ""])
     for item in result.limitations:
         lines.append(f"- {_md_escape(item)}")
-    
+
     return "\n".join(lines)
