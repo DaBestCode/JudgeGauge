@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://judgegauge.example.com/schemas/judgegauge-result-v1.schema.json",
+  "$id": "https://raw.githubusercontent.com/DaBestCode/JudgeGauge/main/schemas/judgegauge-result-v1.schema.json",
   "title": "JudgeGauge Calibration Result",
   "description": "Schema for JudgeGauge calibration results. Unknown additive fields remain allowed within version 1. A breaking field removal or semantic change requires a new schema version.",
   "type": "object",
