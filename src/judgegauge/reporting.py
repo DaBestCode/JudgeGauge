@@ -41,7 +41,9 @@ def render_text(result: CalibrationResult) -> str:
 
 
 def render_json(result: CalibrationResult) -> str:
-    return json.dumps(result.to_dict(), indent=2, sort_keys=True)
+    payload = result.to_dict()
+    payload["schema_version"] = 1
+    return json.dumps(payload, indent=2, sort_keys=True)
 
 
 def render_sarif(result: CalibrationResult) -> str:
