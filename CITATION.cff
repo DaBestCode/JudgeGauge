@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: If JudgeGauge supports published work, cite the exact software release used.
+title: "JudgeGauge: Reliability gates for LLM-as-judge pipelines"
+type: software
+authors:
+  - name: JudgeGauge contributors
+repository-code: https://github.com/DaBestCode/JudgeGauge
+url: https://github.com/DaBestCode/JudgeGauge
+license: Apache-2.0
+version: 0.1.0
+date-released: 2026-09-07
+

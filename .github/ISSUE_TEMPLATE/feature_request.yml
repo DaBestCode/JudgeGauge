@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a focused gate, adapter, report, or developer-experience improvement.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which user decision or evaluation failure does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: Claim licensed by the feature
+      description: State precisely what evidence the result would and would not support.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed interface
+      description: Include a call site or CLI example before implementation details.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Keyless verification plan
+      description: Explain how this can be tested without paid calls or contributor credentials.
+    validations:
+      required: true
+

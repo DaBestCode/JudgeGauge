@@ -34,6 +34,47 @@ judgegauge gate --smoke --format html --output judgegauge.html
 
 Exit `0` means the frozen smoke gates passed, `1` means calibration completed but failed, and `2` means the gate could not be evaluated. Unparseable readouts fail closed.
 
+## GitHub Action
+
+Until the first tagged release, pin the action to a commit SHA in production. For early testing:
+
+```yaml
+jobs:
+  judge-calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DaBestCode/JudgeGauge@main
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+```
+
+Make expensive evaluation jobs depend on `judge-calibration` with `needs:`. The reusable action
+installs JudgeGauge from the selected Git revision, writes `judgegauge-report.json`, and preserves the
+CLI's fail-closed exit codes. See the [complete workflow](examples/github-actions.yml).
+
+## GitHub Actions
+
+```yaml
+jobs:
+  judge-calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DaBestCode/JudgeGauge@main
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  expensive-evaluation:
+    needs: judge-calibration
+    runs-on: ubuntu-latest
+    steps:
+      - run: python -m my_project.evaluate
+```
+
+Pin a release tag rather than `main` after the first release. The action writes
+`judgegauge-report.json` by default and propagates JudgeGauge's fail-closed exit code.
+
 ## Old Way vs. JudgeGauge
 
 | Concern | Old Way / Fragile DIY | Using JudgeGauge |
@@ -72,6 +113,12 @@ python -m pip install -e '.[dev]'
 python -m unittest discover -s tests
 ruff check .
 ```
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. The
+[roadmap](ROADMAP.md) and [`good first issue`](https://github.com/DaBestCode/JudgeGauge/labels/good%20first%20issue)
+queue are the best starting points. Security problems belong in
+[private vulnerability reports](https://github.com/DaBestCode/JudgeGauge/security/advisories/new),
+not public issues.
 
 ## License
 

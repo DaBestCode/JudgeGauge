@@ -1,0 +1,24 @@
+name: Evaluation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  judge-calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DaBestCode/JudgeGauge@main
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: judgegauge-report
+          path: judgegauge-report.json
+
+  expensive-evaluation:
+    needs: judge-calibration
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Run the evaluation here"

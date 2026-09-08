@@ -1,0 +1,49 @@
+name: JudgeGauge Reliability Gate
+description: Fail closed before an evaluation when an LLM judge fails same-window calibration.
+author: JudgeGauge contributors
+
+branding:
+  icon: check-circle
+  color: purple
+
+inputs:
+  model:
+    description: Model id. Defaults to OPENAI_MODEL or JudgeGauge's versioned package default.
+    required: false
+    default: ""
+  base-url:
+    description: OpenAI-compatible API base URL. Defaults to OPENAI_BASE_URL.
+    required: false
+    default: ""
+  format:
+    description: Report format written to output.
+    required: false
+    default: json
+  output:
+    description: Report path.
+    required: false
+    default: judgegauge-report.json
+
+runs:
+  using: composite
+  steps:
+    - name: Install JudgeGauge from this action revision
+      shell: bash
+      run: python -m pip install "$GITHUB_ACTION_PATH"
+    - name: Calibrate judge
+      shell: bash
+      env:
+        JUDGEGAUGE_INPUT_MODEL: ${{ inputs.model }}
+        JUDGEGAUGE_INPUT_BASE_URL: ${{ inputs.base-url }}
+        JUDGEGAUGE_INPUT_FORMAT: ${{ inputs.format }}
+        JUDGEGAUGE_INPUT_OUTPUT: ${{ inputs.output }}
+      run: |
+        args=(gate --smoke --format "$JUDGEGAUGE_INPUT_FORMAT" --output "$JUDGEGAUGE_INPUT_OUTPUT")
+        if [[ -n "$JUDGEGAUGE_INPUT_MODEL" ]]; then
+          args+=(--model "$JUDGEGAUGE_INPUT_MODEL")
+        fi
+        if [[ -n "$JUDGEGAUGE_INPUT_BASE_URL" ]]; then
+          args+=(--base-url "$JUDGEGAUGE_INPUT_BASE_URL")
+        fi
+        python -m judgegauge "${args[@]}"
+

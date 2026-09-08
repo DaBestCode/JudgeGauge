@@ -1,0 +1,58 @@
+name: Bug report
+description: Report reproducible incorrect behavior without including credentials.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste API keys, authorization headers, or unredacted private judge responses.
+  - type: input
+    id: version
+    attributes:
+      label: JudgeGauge version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Python API
+        - CLI
+        - OpenAI-compatible adapter
+        - JSON report
+        - SARIF report
+        - HTML report
+        - GitHub Action
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Use a fake judge or redacted fixture whenever possible.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials and sensitive judge inputs from this report.
+          required: true
+
