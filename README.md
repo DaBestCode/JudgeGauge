@@ -63,7 +63,7 @@ Version `0.1.0` is the first vertical slice:
 - Text, JSON, SARIF, and standalone HTML reports
 - Fail-closed CLI exit codes
 
-Cross-day sealed baselines, framework adapters, GitHub Actions packaging, richer provenance logs, and statistically calibrated task-specific batteries remain roadmap work.
+Cross-day sealed baselines, framework adapters, GitHub Actions packaging, richer provenance logs, and statistically calibrated task-specific batteries remain roadmap work. Live endpoint validation is tracked in [issue #1](https://github.com/DaBestCode/JudgeGauge/issues/1); the default test suite remains keyless.
 
 ## Development
 

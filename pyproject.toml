@@ -20,6 +20,10 @@ classifiers = [
 ]
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/DaBestCode/JudgeGauge"
+Issues = "https://github.com/DaBestCode/JudgeGauge/issues"
+
 [project.optional-dependencies]
 dev = ["ruff>=0.9"]
 
