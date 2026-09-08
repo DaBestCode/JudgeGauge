@@ -30,6 +30,7 @@ The bounded smoke suite makes nine requests and measures same-window repeat rank
 judgegauge gate --smoke --format json --output judgegauge.json
 judgegauge gate --smoke --format sarif --output judgegauge.sarif
 judgegauge gate --smoke --format html --output judgegauge.html
+judgegauge gate --smoke --format markdown --output judgegauge.md
 ```
 
 Exit `0` means the frozen smoke gates passed, `1` means calibration completed but failed, and `2` means the gate could not be evaluated. Unparseable readouts fail closed.
@@ -101,7 +102,7 @@ Version `0.1.0` is the first vertical slice:
 - Built-in same-window smoke suite
 - OpenAI-compatible Chat Completions adapter
 - Custom Python judge protocol
-- Text, JSON, SARIF, and standalone HTML reports
+- Text, JSON, SARIF, standalone HTML, and Markdown reports
 - Fail-closed CLI exit codes
 
 Cross-day sealed baselines, framework adapters, GitHub Actions packaging, richer provenance logs, and statistically calibrated task-specific batteries remain roadmap work. Live endpoint validation is tracked in [issue #1](https://github.com/DaBestCode/JudgeGauge/issues/1); the default test suite remains keyless.
