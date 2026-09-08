@@ -40,9 +40,45 @@ class ReportingTests(unittest.TestCase):
         result = judgegauge.calibrate(StableJudge())
 
         self.assertIn("VERDICT: PASS", render_text(result))
-        self.assertEqual(json.loads(render_json(result))["verdict"], "pass")
+
+        json_data = json.loads(render_json(result))
+        self.assertEqual(json_data["verdict"], "pass")
+        self.assertEqual(json_data["schema_version"], 1)
+
         self.assertEqual(json.loads(render_sarif(result))["version"], "2.1.0")
         self.assertIn("<title>JudgeGauge report</title>", render_html(result))
+
+    def test_json_matches_schema_pass(self):
+        import os
+
+        import jsonschema
+
+        result = judgegauge.calibrate(StableJudge())
+        json_data = json.loads(render_json(result))
+
+        schema_path = os.path.join(
+            os.path.dirname(__file__), "..", "schemas", "judgegauge-result-v1.schema.json"
+        )
+        with open(schema_path, encoding="utf-8") as f:
+            schema = json.load(f)
+
+        jsonschema.validate(instance=json_data, schema=schema)
+
+    def test_json_matches_schema_fail(self):
+        import os
+
+        import jsonschema
+
+        result = judgegauge.calibrate(FailingJudge())
+        json_data = json.loads(render_json(result))
+
+        schema_path = os.path.join(
+            os.path.dirname(__file__), "..", "schemas", "judgegauge-result-v1.schema.json"
+        )
+        with open(schema_path, encoding="utf-8") as f:
+            schema = json.load(f)
+
+        jsonschema.validate(instance=json_data, schema=schema)
 
     def test_markdown_contains_verdict(self):
         result = judgegauge.calibrate(StableJudge())
